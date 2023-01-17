@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const Joi = require("joi");
 
 app.use(express.json());
 
@@ -36,17 +37,21 @@ app.get("/api/courses/:id", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+  });
+
+  const result = schema.validate(req.body);
+
+  if (result.error) {
+    res.send(result.error.details[0].message);
+  }
+
   const newCourse = {
     id: req.body.id,
     name: req.body.name,
   };
 
-  if (!req.body.id) {
-    res.status(400).send("Id missing");
-  }
-  if (!req.body.name) {
-    res.status(400).send("Name missing");
-  }
   res.send(newCourse);
 });
 
