@@ -9,12 +9,14 @@ const port = process.env.PORT || 8000;
 MongoClient.connect(process.env.RESTREVIEWS_DB_URI, {
   maxPoolSize: 50,
   writeConcern: 2500,
-  useNewUrlParse: true,
+  useNewUrlParser: true,
 })
   .catch((err) => {
     console.error(err.stack);
     process.exit(1);
   })
   .then(async (client) => {
-    console.log(`Listening on port ${port}`);
+    app.listen(port, () => {
+      console.log(`Listening on port ${port}`);
+    });
   });
